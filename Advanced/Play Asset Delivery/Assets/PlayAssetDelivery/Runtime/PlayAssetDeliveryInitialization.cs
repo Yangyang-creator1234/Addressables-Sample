@@ -124,12 +124,12 @@ namespace AddressablesPlayAssetDelivery
             UnityWebRequest www = UnityWebRequest.Get(CustomAssetPackUtility.CustomAssetPacksDataRuntimePath);
             www.SendWebRequest().completed += (op) =>
             {
-                UnityWebRequest www = (op as UnityWebRequestAsyncOperation).webRequest;
-                if (www.result != UnityWebRequest.Result.Success)
-                    CompleteOverride($"Could not load '{CustomAssetPackUtility.kCustomAssetPackDataFilename}' : {www.error}.");
+                UnityWebRequest wwwRequest = (op as UnityWebRequestAsyncOperation).webRequest;
+                if (!string.IsNullOrEmpty(wwwRequest.error))
+                    CompleteOverride($"Could not load '{CustomAssetPackUtility.kCustomAssetPackDataFilename}' : {wwwRequest.error}.");
                 else
                 {
-                    InitializeBundleToAssetPackMap(www.downloadHandler.text);
+                    InitializeBundleToAssetPackMap(wwwRequest.downloadHandler.text);
                     Addressables.ResourceManager.InternalIdTransformFunc = AppBundleTransformFunc;
                     CompleteOverride(null);
                 }
